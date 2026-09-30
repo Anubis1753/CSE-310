@@ -1,0 +1,50 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "RPG: Build",
+            "type": "shell",
+            "command": "C:/msys64/ucrt64/bin/g++.exe",
+            "args": [
+                "-std=c++17",
+                "-Wall",
+                "-Wextra",
+                "-pedantic",
+                "${workspaceFolder}/RPG/main.cpp",
+                "-o",
+                "${workspaceFolder}/RPG/rpg.exe"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/RPG",
+                "env": {
+                    "PATH": "C:/msys64/ucrt64/bin;${env:PATH}"
+                }
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [
+                "$gcc"
+            ]
+        },
+        {
+            "label": "RPG: Run",
+            "type": "shell",
+            "command": "${workspaceFolder}/RPG/rpg.exe",
+            "dependsOn": "RPG: Build",
+            "options": {
+                "cwd": "${workspaceFolder}/RPG",
+                "env": {
+                    "PATH": "C:/msys64/ucrt64/bin;${env:PATH}"
+                }
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated",
+                "focus": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}

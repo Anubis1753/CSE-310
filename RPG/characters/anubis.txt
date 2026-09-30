@@ -1,0 +1,20 @@
+anubis
+Swordsman
+40
+1
+0
+
+Starter Cloth Chestplate
+
+Starter Cloth Pants
+Starter Cloth Boots
+
+
+
+
+
+
+
+7 1 4 4
+0
+0
