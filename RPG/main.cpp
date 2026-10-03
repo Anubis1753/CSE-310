@@ -882,14 +882,14 @@ Enemy generateEnemy(const std::string& areaName, int depth) {
         enemyName = "Forest Guardian";
     }
 
-    const int maxHealth = 10 + enemyLevel * 10;
+    const int maxHealth = 25 + enemyLevel * 15;
     return {
         enemyName,
         enemyLevel,
         maxHealth,
         maxHealth,
-        std::max(0, enemyLevel - 1),
-        {enemyLevel, enemyLevel, enemyLevel, enemyLevel}
+        1 + enemyLevel,
+        {3 + enemyLevel * 2, 2 + enemyLevel, 1 + enemyLevel, 2 + enemyLevel}
     };
 }
 
@@ -953,18 +953,17 @@ bool combat(Character& character, Enemy enemy) {
 
         const int playerArmor = getEquipmentArmor(character.equipment);
         int enemyDamage = std::max(
-            0,
+            1,
             enemy.attributes.strength * 3 / 2
                 - playerAttributes.constitution
                 - playerArmor
                 + damageVariation(generator)
         );
         if (defending) {
-            enemyDamage = std::max(0, enemyDamage / 2);
+            enemyDamage = std::max(1, enemyDamage / 2);
         }
 
-        if (enemyDamage > 0 &&
-            dodgeRoll(generator) <= std::min(50, playerAttributes.agility * 3)) {
+        if (dodgeRoll(generator) <= std::min(50, playerAttributes.agility * 3)) {
             std::cout << "You dodged the attack!\n";
             continue;
         }
