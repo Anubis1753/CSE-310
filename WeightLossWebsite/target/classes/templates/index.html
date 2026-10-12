@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalized Planner</title><link rel="stylesheet" th:href="@{/style.css}">
+</head>
+<body>
+<header><div class="brand">Well<span>Plan</span></div><p>Personalized meals and workouts for your week</p></header>
+<main>
+    <section class="intro"><p class="eyebrow">FIRST DRAFT</p><h1>Build a plan that fits your life.</h1><p>Enter a few details to generate a practical weekly meal and workout plan. This is general wellness guidance, not medical advice.</p></section>
+    <form class="card form-grid" action="/plan" method="post" th:object="${request}">
+        <h2>Your profile</h2>
+        <label>Age<input type="number" min="13" max="100" th:field="*{age}" required></label>
+        <label>Height (cm)<input type="number" min="1" step="0.1" th:field="*{height}" required></label>
+        <label>Weight (kg)<input type="number" min="1" step="0.1" th:field="*{weight}" required></label>
+        <label>Activity level<select th:field="*{activityLevel}"><option value="Lightly active">Lightly active</option><option value="Moderately active">Moderately active</option><option value="Very active">Very active</option></select></label>
+        <label>Fitness level<select th:field="*{fitnessLevel}"><option value="Beginner">Beginner</option><option value="Intermediate">Intermediate</option><option value="Advanced">Advanced</option></select></label>
+        <label>Primary goal<select th:field="*{goal}"><option value="Lose weight">Lose weight</option><option value="Maintain weight">Maintain weight</option><option value="Gain muscle">Gain muscle</option></select></label>
+        <label>Workout days per week<select th:field="*{workoutDays}"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option></select></label>
+        <label>Diet<select th:field="*{diet}"><option value="Omnivore">Omnivore</option><option value="Vegetarian">Vegetarian</option><option value="Vegan">Vegan</option><option value="Mediterranean">Mediterranean</option></select></label>
+        <label>Cuisine preference<select th:field="*{cuisine}"><option value="Any">Any</option><option value="Mediterranean">Mediterranean</option><option value="Mexican">Mexican</option><option value="Asian-inspired">Asian-inspired</option></select></label>
+        <label>Available equipment<select th:field="*{equipment}"><option value="None">None</option><option value="Home basics">Home basics</option><option value="Full gym">Full gym</option></select></label>
+        <label class="wide">Foods to avoid<input type="text" placeholder="Optional: peanuts, shellfish..." th:field="*{foodsToAvoid}"></label>
+        <div class="wide actions"><button type="submit">Generate my plan</button><span th:if="${error}" class="error" th:text="${error}"></span></div>
+    </form>
+
+    <section th:if="${plan}" id="results" class="results">
+        <div class="results-heading"><div><p class="eyebrow">YOUR WEEK</p><h2>Personalized plan</h2><p>Estimated daily target: <strong th:text="${plan.dailyCalorieTarget}"></strong> calories</p></div>
+            <form action="/plan/pdf" method="post">
+                <input type="hidden" name="age" th:value="${request.age}"><input type="hidden" name="height" th:value="${request.height}"><input type="hidden" name="weight" th:value="${request.weight}">
+                <input type="hidden" name="activityLevel" th:value="${request.activityLevel}"><input type="hidden" name="fitnessLevel" th:value="${request.fitnessLevel}"><input type="hidden" name="goal" th:value="${request.goal}">
+                <input type="hidden" name="workoutDays" th:value="${request.workoutDays}"><input type="hidden" name="diet" th:value="${request.diet}"><input type="hidden" name="cuisine" th:value="${request.cuisine}"><input type="hidden" name="equipment" th:value="${request.equipment}"><input type="hidden" name="foodsToAvoid" th:value="${request.foodsToAvoid}">
+                <button class="secondary" type="submit">Download PDF</button>
+            </form></div>
+        <div class="day-grid"><article class="day card" th:each="day, dayStat : ${plan.days}"><h3 th:text="${day.day}"></h3><h4>Meals</h4><div class="meal" th:each="meal, mealStat : ${day.meals}"><span class="tag" th:text="${meal.category}"></span><strong th:text="${meal.name}"></strong><small th:text="${meal.calories + ' calories · ' + meal.description}"></small><form action="/plan/replace-meal" method="post"><input type="hidden" name="dayIndex" th:value="${dayStat.index}"><input type="hidden" name="mealIndex" th:value="${mealStat.index}"><input type="hidden" name="age" th:value="${request.age}"><input type="hidden" name="height" th:value="${request.height}"><input type="hidden" name="weight" th:value="${request.weight}"><input type="hidden" name="activityLevel" th:value="${request.activityLevel}"><input type="hidden" name="fitnessLevel" th:value="${request.fitnessLevel}"><input type="hidden" name="goal" th:value="${request.goal}"><input type="hidden" name="workoutDays" th:value="${request.workoutDays}"><input type="hidden" name="diet" th:value="${request.diet}"><input type="hidden" name="cuisine" th:value="${request.cuisine}"><input type="hidden" name="equipment" th:value="${request.equipment}"><input type="hidden" name="foodsToAvoid" th:value="${request.foodsToAvoid}"><button class="replace" type="submit">Replace</button></form></div><h4>Workout</h4><div class="workout"><strong th:text="${day.workout.name}"></strong><small th:text="${day.workout.focus + ' · ' + day.workout.details}"></small></div></article></div>
+        <section class="workout-detail-grid">
+            <article class="workout-detail card" th:each="day : ${plan.days}">
+                <div class="workout-header"><div><p class="eyebrow">WORKOUT</p><h3 th:text="${day.day + ' - ' + day.workout.name}"></h3><p th:text="${day.workout.focus + ' · ' + day.workout.details}"></p></div><strong class="time" th:text="${day.workout.totalMinutes + ' min'}"></strong></div>
+                <div class="guidance"><strong>Warm-up</strong><span th:text="${day.workout.warmup}"></span></div>
+                <div class="exercise-list"><div class="exercise" th:each="exercise : ${day.workout.exercises}"><strong th:text="${exercise.name}"></strong><span class="machine" th:text="${'Machine/equipment: ' + exercise.machine}"></span><span th:text="${exercise.sets + ' sets · ' + exercise.reps + ' · ' + exercise.restSeconds + ' sec rest'}"></span><small th:text="${exercise.notes}"></small></div></div>
+                <div class="guidance"><strong>Cool-down</strong><span th:text="${day.workout.cooldown}"></span></div>
+            </article>
+        </section>
+    </section>
+</main><footer>WellPlan · Temporary plan preview · Consult a qualified professional for personalized medical advice.</footer>
+<script th:if="${plan}">document.getElementById('results').scrollIntoView({behavior: 'smooth'});</script>
+</body></html>

@@ -1,0 +1,9 @@
+com\weightloss\planner\model\WeeklyPlan.class
+com\weightloss\planner\controller\PlannerController.class
+com\weightloss\planner\model\Meal.class
+com\weightloss\planner\model\PlanRequest.class
+com\weightloss\planner\service\PlannerService.class
+com\weightloss\planner\model\Exercise.class
+com\weightloss\planner\model\DayPlan.class
+com\weightloss\planner\model\Workout.class
+com\weightloss\planner\PlannerApplication.class
