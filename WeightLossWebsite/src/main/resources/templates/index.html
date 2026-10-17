@@ -20,7 +20,7 @@
         <label>Diet<select th:field="*{diet}"><option value="Omnivore">Omnivore</option><option value="Vegetarian">Vegetarian</option><option value="Vegan">Vegan</option><option value="Mediterranean">Mediterranean</option></select></label>
         <label>Cuisine preference<select th:field="*{cuisine}"><option value="Any">Any</option><option value="Mediterranean">Mediterranean</option><option value="Mexican">Mexican</option><option value="Asian-inspired">Asian-inspired</option></select></label>
         <label>Available equipment<select th:field="*{equipment}"><option value="None">None</option><option value="Home basics">Home basics</option><option value="Full gym">Full gym</option></select></label>
-        <label class="wide">Foods to avoid<input type="text" placeholder="Optional: peanuts, shellfish..." th:field="*{foodsToAvoid}"></label>
+        <label class="wide">Allergies or foods to avoid<input type="text" placeholder="Optional: fish, peanuts, dairy, shellfish..." th:field="*{foodsToAvoid}"></label>
         <div class="wide actions"><button type="submit">Generate my plan</button><span th:if="${error}" class="error" th:text="${error}"></span></div>
     </form>
 

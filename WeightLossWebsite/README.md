@@ -186,3 +186,13 @@ than changing their core responsibilities.
 ## Current status
 
 Project planning and requirements definition. Implementation has not started.
+
+
+
+<!-- Run command:
+cd "C:\Codding\CSE 310\WeightLossWebsite"
+$env:JAVA_HOME="C:\Program Files\Eclipse Adoptium\jdk-17.0.20.101-hotspot"
+.\.tools\apache-maven-3.9.9\bin\mvn.cmd spring-boot:run
+
+open on this website address:
+http://localhost:8080 -->
